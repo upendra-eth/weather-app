@@ -6,6 +6,8 @@ import { useState, useEffect } from 'react';
 import fetchWeather from './utils/fetchWeather';
 import CurrentWeather from './components/CurrentWeather';
 import RainStatus from './components/RainStatus';
+import LocationSearch from './components/LocationSearch';
+import '../app/globals.css';
 
 const Home = () => {
   const [lat, setLat] = useState(null);
@@ -25,17 +27,15 @@ const Home = () => {
           setLon(longitude);
         },
         (error) => {
-          console.error('Error getting geolocation:', error);
           setError('Error getting geolocation');
         }
       );
     } else {
-      console.error('Geolocation not available');
       setError('Geolocation not available');
     }
   }, []);
 
-  // Effect to fetch weather data
+  // Effect to fetch weather data based on geolocation
   useEffect(() => {
     const apiKey = process.env.NEXT_PUBLIC_OPENWEATHERMAP_API_KEY;
 
@@ -45,7 +45,6 @@ const Home = () => {
           const data = await fetchWeather(lat, lon, apiKey);
           setWeatherData(data);
         } catch (error) {
-          console.error('Error fetching weather data:', error);
           setError('Error fetching weather data');
         }
       }
@@ -55,19 +54,28 @@ const Home = () => {
   }, [lat, lon]);
 
   if (error) {
-    return <div className="text-red-600 text-center p-4">{error}</div>;
-  }
-
-  if (!weatherData) {
-    return <div className="text-center p-4">Loading...</div>;
+    return <div className="text-red-600 text-center mt-4">{error}</div>;
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-semibold text-center mb-8">Weather App</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <CurrentWeather weather={weatherData} />
-        <RainStatus weather={weatherData} />
+    <div className="bg-gray-900 text-white min-h-screen">
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-3xl font-bold text-center mb-8">Weather App</h1>
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+          <div>
+            <h2 className="text-xl font-bold mb-4">Current Weather</h2>
+            {weatherData ? (
+              <CurrentWeather weather={weatherData} />
+            ) : (
+              <p className="text-gray-300">Loading...</p>
+            )}
+            {weatherData && <RainStatus weather={weatherData} />}
+          </div>
+          <div>
+            <h2 className="text-xl font-bold mb-4">Location Search</h2>
+            <LocationSearch />
+          </div>
+        </div>
       </div>
     </div>
   );
