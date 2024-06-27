@@ -1,5 +1,5 @@
+// page.js
 'use client'
-
 // page.js
 
 import { useState, useEffect } from 'react';
@@ -15,7 +15,6 @@ const Home = () => {
   const [weatherData, setWeatherData] = useState(null);
   const [error, setError] = useState(null);
 
-  // Effect to get geolocation
   useEffect(() => {
     const apiKey = process.env.NEXT_PUBLIC_OPENWEATHERMAP_API_KEY;
 
@@ -35,7 +34,6 @@ const Home = () => {
     }
   }, []);
 
-  // Effect to fetch weather data based on geolocation
   useEffect(() => {
     const apiKey = process.env.NEXT_PUBLIC_OPENWEATHERMAP_API_KEY;
 
@@ -54,28 +52,22 @@ const Home = () => {
   }, [lat, lon]);
 
   if (error) {
-    return <div className="text-red-600 text-center mt-4">{error}</div>;
+    return <div className="text-red-600">{error}</div>;
   }
 
   return (
-    <div className="bg-gray-900 text-white min-h-screen">
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold text-center mb-8">Weather App</h1>
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-          <div>
-            <h2 className="text-xl font-bold mb-4">Current Weather</h2>
-            {weatherData ? (
-              <CurrentWeather weather={weatherData} />
-            ) : (
-              <p className="text-gray-300">Loading...</p>
-            )}
-            {weatherData && <RainStatus weather={weatherData} />}
-          </div>
-          <div>
-            <h2 className="text-xl font-bold mb-4">Location Search</h2>
-            <LocationSearch />
-          </div>
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-4xl font-bold text-center mb-8">Weather App</h1>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="flex flex-col items-center">
+          <LocationSearch />
         </div>
+        {weatherData && (
+          <div className="flex flex-col items-center space-y-4">
+            <CurrentWeather weather={weatherData} />
+            <RainStatus weather={weatherData} />
+          </div>
+        )}
       </div>
     </div>
   );

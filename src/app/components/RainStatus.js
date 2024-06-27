@@ -4,7 +4,7 @@ import React from 'react';
 
 const RainStatus = ({ weather }) => {
   if (!weather || !weather.weather) {
-    return <p className="text-white">Loading rain status...</p>;
+    return <p className="text-gray-400">Loading rain status...</p>;
   }
 
   const isRaining = weather.weather.some((condition) =>
@@ -12,14 +12,15 @@ const RainStatus = ({ weather }) => {
   );
 
   return (
-    <div className="bg-gray-800 p-4 rounded-lg shadow-lg text-white">
-      <h2 className="text-xl font-semibold mb-2">Rain Status</h2>
-      {isRaining ? (
-        // eslint-disable-next-line react/no-unescaped-entities
-        <p>It's currently raining at {weather.name}.</p>
-      ) : (
-        <p>No rain at {weather.name} at the moment.</p>
-      )}
+    <div className="bg-gray-800 shadow-lg rounded-lg overflow-hidden w-full max-w-md">
+      <div className="p-4">
+        <h2 className="text-xl font-semibold mb-2 text-gray-100">Rain Status</h2>
+        {isRaining ? (
+          <p className="text-gray-300">It's currently raining at {weather.name}.</p>
+        ) : (
+          <p className="text-gray-300">No rain at {weather.name} at the moment.</p>
+        )}
+      </div>
     </div>
   );
 };
